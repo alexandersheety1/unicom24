@@ -53,10 +53,19 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'unicom24.urls'
 
+DIST_DIR = os.path.join(os.path.join(BASE_DIR, 'front'), 'dist')
+CSS_DIR = os.path.join(DIST_DIR, 'css')
+JS_DIR = os.path.join(DIST_DIR, 'js')
+STATICFILES_DIRS = [
+    DIST_DIR,
+    CSS_DIR,
+    JS_DIR
+]
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates'), os.path.join(BASE_DIR, 'front')]
+        'DIRS': [DIST_DIR]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -123,14 +132,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 MEDIA_FOLDER = os.path.join(BASE_DIR, 'media')
 STATIC_URL = '/static/'
-DIST_DIR = os.path.join(os.path.join(BASE_DIR, 'front'), 'dist')
-CSS_DIR = os.path.join(DIST_DIR, 'css')
-JS_DIR = os.path.join(DIST_DIR, 'js')
-STATICFILES_DIRS = [
-    DIST_DIR,
-    CSS_DIR,
-    JS_DIR
-]
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
