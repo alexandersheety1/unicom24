@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
@@ -25,8 +24,7 @@ SECRET_KEY = 'bkw96vl^-f4vfsp6_rdtttz3)t$ole=813)nsl$quwp!my-omp'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost']
-
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # Application definition
 
@@ -58,7 +56,7 @@ ROOT_URLCONF = 'unicom24.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates'),os.path.join(BASE_DIR, 'front')]
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), os.path.join(BASE_DIR, 'front')]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -74,7 +72,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'unicom24.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
@@ -84,7 +81,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -127,11 +123,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 MEDIA_FOLDER = os.path.join(BASE_DIR, 'media')
 STATIC_URL = '/static/'
-#STATIC_ROOT = os.path.join(BASE_DIR, 'front')
-FRONT_DIR=os.path.join(BASE_DIR, 'front')
+DIST_DIR = os.path.join(os.path.join(BASE_DIR, 'front'), 'dist')
+CSS_DIR = os.path.join(DIST_DIR, 'css')
+JS_DIR = os.path.join(DIST_DIR, 'js')
 STATICFILES_DIRS = [
-    FRONT_DIR,
-    os.path.join(FRONT_DIR, 'bundles'),
+    DIST_DIR,
+    CSS_DIR,
+    JS_DIR
 ]
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -153,4 +151,3 @@ REST_REGISTRATION = {
 }
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
-
