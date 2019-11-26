@@ -26,7 +26,7 @@
               id="email"
               v-model="input.email"
               type="email"
-              placeholder="pemail"
+              placeholder="email"
               class="col-5 bordered"
             />
           </div>
@@ -59,7 +59,7 @@
               variant="outline-primary"
               @click="registration()"
             >
-              Войти
+              Зарегестрироваться
             </b-button>
           </div>
         </div>

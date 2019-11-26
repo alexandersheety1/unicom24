@@ -4,6 +4,7 @@
     <div class="row">
       <b-img
         v-for="i in images"
+        :key="i"
         :src="i"
         fluid
         alt=""
@@ -26,7 +27,7 @@ export default {
     }
   },
   created () {
-    this.fetchData()
+    this.fetchData();
   },
   methods: {
     fetchData () {
