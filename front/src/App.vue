@@ -15,7 +15,7 @@ import { mapGetters } from 'vuex'
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 
-Vue.use(BootstrapVue)
+Vue.use(BootstrapVue);
 export default {
   name: 'App',
   components: {

@@ -1,7 +1,62 @@
 <template>
   <div class="col-12">
-    <navbar />
     <div class="row">
+      <b-modal
+        id="modal"
+        title="Добавить изображение"
+        @show="resetModal"
+        @hidden="resetModal"
+        @ok="modalOk"
+      >
+        <b-form @submit.stop.prevent="onSubmit">
+          <div class="row">
+            <div :class="invalidate">
+              Ошибка при входе, проверьте данные
+            </div>
+            <div class="col-12">
+              <div class="row">
+                Изображение:
+                <b-input
+                  id="username"
+                  v-model="image"
+                  type="file"
+                  placeholder="username"
+                  class="col-5 bordered"
+                />
+              </div>
+            </div>
+          </div>
+        </b-form>
+      </b-modal>
+      <div class="row justify-content-center py-4">
+        Галлерея
+      </div>
+      <div class="row justify-content-center pb-4">
+        <div class="col-6">
+          <div class="row">
+            <b-button
+              v-b-modal.modal
+              class="mr-4"
+              variant="outline-primary"
+            >
+              Добавить Изображение
+            </b-button>
+            <b-button variant="outline-primary">
+              Загружить 1 файлом
+            </b-button>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="row justify-content-end">
+            Пользователь: {{ username }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      v-if="images.length>0"
+      class="row"
+    >
       <b-img
         v-for="i in images"
         :key="i"
@@ -11,30 +66,73 @@
         class="p-2"
       />
     </div>
+    <div
+      v-else
+      clas="row p-2"
+    >
+      Добавьте изображения
+    </div>
   </div>
 </template>
 
 <script>
-import Navbar from './Navbar.vue'
-export default {
-  name: 'Gallery',
-  components: {
-    'navbar': Navbar
-  },
-  data () {
-    return {
-      images: null
-    }
-  },
-  created () {
-    this.fetchData();
-  },
-  methods: {
-    fetchData () {
+    import {mapGetters} from 'vuex';
+    import {create_formdata} from '../store/storage';
 
+    export default {
+        name: 'Gallery',
+        data() {
+            return {
+                images: null,
+                image: null,
+                invalidate: "invalid-feedback",
+
+            }
+        },
+        computed: mapGetters('auth', [
+            'isAuthenticated',
+            'username',
+            'user_id',
+        ]),
+        created() {
+            this.fetchData();
+        },
+        methods: {
+            fetchData() {
+                this.$store.dispatch({
+                    type: 'gallery/list',
+                    //data: this.input,
+                }).then(result => {
+                    if (!result.error) {
+                        this.images = result.results;
+                    }
+                });
+            },
+            resetModal() {
+                this.image = null;
+            },
+            modalOk() {
+                let file = this.image.files[0];
+                if (file) {
+                    this.$store.dispatch({
+                        type: 'gallery/create',
+                        data: {
+                            "image": create_formdata(file),
+                            "user": this.user_id,
+                        },
+                    }).then(result => {
+                        if (!result.error) {
+                            // eslint-disable-next-line no-console
+                            console.log("IMAGE DATA: ",result);
+                            this.fetchData();
+                        }
+                    });
+                }
+
+
+            },
+        }
     }
-  }
-}
 </script>
 
 <style scoped>

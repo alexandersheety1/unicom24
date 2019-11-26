@@ -3,8 +3,9 @@
     <div class="row">
       <h1>Registration</h1>
     </div>
-    <form @submit.prevent="submit">
+    <b-form @submit.stop.prevent="onSubmit">
       <div class="row">
+        <div :class="invalidate">Ошибка при регистрации, проверьте данные</div>
         <div class="col-5">
           <div class="row">
             <h3>Username:</h3>
@@ -64,31 +65,50 @@
           </div>
         </div>
       </div>
-    </form>
+    </b-form>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'Registration',
-  data () {
-    return {
-      input: {
-        'username': null,
-        'password': null,
-        'password_confirm': null,
-        'email': null
-      }
+    export default {
+        name: 'Registration',
+        data() {
+            return {
+                input: {
+                    'username': null,
+                    'password': null,
+                    'password_confirm': null,
+                    'email': null
+                },
+                invalidate: "invalid-feedback",
+            }
+        },
+        methods: {
+            registration() {
+                this.$store.dispatch({
+                    type: 'auth/registration',
+                    data: this.input,
+                }).then(result => {
+                        if (!result.error) {
+                            this.$store.dispatch({
+                                type: 'auth/login',
+                                data: {
+                                    'username': this.input.username,
+                                    'password': this.input.password,
+                                },
+                            }).then(newresult => {
+                                if (!newresult.error) {
+                                    this.$router.push('/');
+                                } else {
+                                    this.invalidate = "invalid-feedback shows";
+                                }
+                            });
+                        } else {
+                            this.invalidate = "invalid-feedback shows";
+                        }
+                    }
+                )
+            }
+        }
     }
-  },
-  methods: {
-    registration () {
-      return true
-    }
-  }
-}
 </script>
-
-<style scoped>
-
-</style>

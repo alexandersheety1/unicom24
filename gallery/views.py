@@ -34,7 +34,6 @@ class GalleryViewSet(viewsets.ModelViewSet):
     filterset_fields = '__all__'
     queryset = Gallery.objects.all()
 
-
 class CommentsViewSet(viewsets.ModelViewSet):
     serializer_class = CommentsSerializer
     permission_classes = [IsAuthenticated, EditPermission]

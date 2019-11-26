@@ -1,12 +1,15 @@
 import session from '../api/session';
 import {get_item, set_item, del_item,} from './storage';
 import {
-    LOGIN_BEGIN,
-    LOGIN_FAILURE,
-    LOGIN_SUCCESS,
-    LOGOUT,
-    REMOVE_TOKEN,
-    SET_TOKEN,
+  LOGIN_BEGIN,
+  LOGIN_FAILURE,
+  LOGIN_SUCCESS,
+  REGISTRATION_BEGIN,
+  REGISTRATION_FAILURE,
+  REGISTRATION_SUCCESS,
+  LOGOUT,
+  REMOVE_TOKEN,
+  SET_TOKEN,
 } from './types';
 
 const TOKEN_STORAGE_KEY = 'TOKEN_STORAGE_KEY';
@@ -14,7 +17,6 @@ const UID_STORAGE_KEY = 'UID_STORAGE_KEY';
 const USERNAME_STORAGE_KEY = 'USERNAME_STORAGE_KEY';
 
 const initialState = {
-    authenticating: false,
     error: false,
     token: null,
     user_id: null,
@@ -28,7 +30,6 @@ const getters = {
 };
 
 const actions = {
-    // залогиниться. Шлем запрос. При удаче - сохраняем токен, делаем состояние логин удачен
     login({commit}, {username, password}) {
         commit(LOGIN_BEGIN);
         return session.login(username, password)
@@ -47,6 +48,11 @@ const actions = {
             .finally(() => commit(REMOVE_TOKEN));
     },
 
+    registration({commit}, {username,email, password,password_confirm}){
+        return session.registration(username,email, password,password_confirm)
+            .then(() => commit(REGISTRATION_SUCCESS))
+            .catch(() => commit(REGISTRATION_FAILURE));
+    },
     initialize({commit}) {
         const data = {
             token: get_item(TOKEN_STORAGE_KEY),
@@ -63,19 +69,24 @@ const actions = {
 
 const mutations = {
     [LOGIN_BEGIN](state) {
-        state.authenticating = true;
         state.error = false;
     },
     [LOGIN_FAILURE](state) {
-        state.authenticating = false;
         state.error = true;
     },
     [LOGIN_SUCCESS](state) {
-        state.authenticating = false;
+        state.error = false;
+    },
+    [REGISTRATION_BEGIN](state) {
+        state.error = false;
+    },
+    [REGISTRATION_FAILURE](state) {
+        state.error = true;
+    },
+    [REGISTRATION_SUCCESS](state) {
         state.error = false;
     },
     [LOGOUT](state) {
-        state.authenticating = false;
         state.error = false;
     },
     [SET_TOKEN](state, data) {
