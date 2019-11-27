@@ -8,7 +8,7 @@ class APIconstructor {
 
     create(data) {
         return session.post(
-            `/api/${this.model}/`,
+            `/api/${this.model}/`.toLowerCase(),
             data
         )
             .then(response => {
@@ -29,7 +29,7 @@ class APIconstructor {
             str = str + key + '=' + value + '&';
         }
         return session.get(
-            `/api/${this.model}/${str}`
+            `/api/${this.model}/${str}`.toLowerCase()
         )
             .then(response => {
                 return response.data;
@@ -45,7 +45,7 @@ class APIconstructor {
 
     get(id) {
         return session.get(
-            `/api/${this.model}/${id}/`
+            `/api/${this.model}/${id}/`.toLowerCase()
         )
             .then(response => {
                 return response.data;
@@ -61,7 +61,7 @@ class APIconstructor {
 
     update(id, data) {
         return session.put(
-            `/api/${this.model}/${id}/`,
+            `/api/${this.model}/${id}/`.toLowerCase(),
             data,
         )
             .then(response => {
@@ -78,7 +78,7 @@ class APIconstructor {
 
     delete(data) {
         return session.delete(
-            `/api/${this.model}/${data.id}/`
+            `/api/${this.model}/${data.id}/`.toLowerCase()
         )
             .then(response => {
                 return response.data;

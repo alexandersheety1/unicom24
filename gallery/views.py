@@ -1,8 +1,13 @@
-from rest_framework import viewsets
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, BasePermission
-from gallery.models import Gallery, Comments
-from gallery.serializers import GallerySerializer, CommentsSerializer, UserSerializer
-from django.contrib.auth.models import User
+from gallery.models import Gallery, Comments, Jobs
+from gallery.serializers import GallerySerializer, CommentsSerializer
+from rest_framework.response import Response
+from rest_framework import status
+from django.http import HttpResponseBadRequest
+from gallery.tasks import send_email
+
 
 class EditPermission(BasePermission):
     def has_object_permission(self, request, view, obj):
@@ -15,29 +20,80 @@ class EditPermission(BasePermission):
             return True
 
 
-# Create your views here.
-class UserViewSet(viewsets.ModelViewSet):
-    serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        if self.request.user.is_superuser:
-            return User.objects.all()
-        return User.objects.all().filter(
-            id=self.request.user.id
-        )
-
-
-class GalleryViewSet(viewsets.ModelViewSet):
+class GalleryViewSet(ModelViewSet):
     serializer_class = GallerySerializer
     permission_classes = [IsAuthenticated, EditPermission]
-    filterset_fields = '__all__'
     queryset = Gallery.objects.all()
 
-class CommentsViewSet(viewsets.ModelViewSet):
+    filterset_fields = (
+        'id',
+        'user'
+    )
+
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, args, kwargs)
+        if len(response.data) == 0:
+            response.data = {
+                'results': [],
+                'user_id': request.user.id,
+                'username': request.user.username
+            }
+        else:
+            response.data = {
+                'results': response.data,
+                'user_id': request.user.id,
+                'username': request.user.username
+            }
+        return response
+
+
+class CommentsViewSet(ModelViewSet):
     serializer_class = CommentsSerializer
     permission_classes = [IsAuthenticated, EditPermission]
-    filterset_fields = '__all__'
+    queryset = Comments.objects.all()
+    filterset_fields = (
+        'id',
+        'user'
+    )
 
-    def get_queryset(self):
-        return Comments.objects.filter(user=self.request.user)
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, args, kwargs)
+        if len(response.data) == 0:
+            response.data = {
+                'results': [],
+                'user_id': request.user.id,
+                'username': request.user.username
+            }
+        else:
+            response.data = {
+                'results': response.data,
+                'user_id': request.user.id,
+                'username': request.user.username
+            }
+        return response
+
+
+class JobsViewSet(APIView):
+    permission_classes = [IsAuthenticated]
+    http_method_names = ['post']
+
+    def post(self, request, format=None):
+        currentjob = Jobs.objects.get_or_create(user=request.user)
+        if currentjob.type != 1:
+            type = request.data.get("type")
+            if type:
+                if type == 2:
+                    gallery = Gallery.objects.filter(user=request.user)
+                else:
+                    gallery = Gallery.objects.all()
+                if gallery.exists():
+                    currentjob.type = 1
+                    currentjob.save()
+                    send_email.delay(currentjob, gallery)
+                else:
+                    return Response({"job_type": 3}, status=status.HTTP_200_OK)
+            else:
+                return HttpResponseBadRequest
+            return Response({"job_type": 1}, status=status.HTTP_200_OK)
+        else:
+            return Response({"job_type": 2}, status=status.HTTP_200_OK)

@@ -1,5 +1,5 @@
 from rest_framework import routers
-from gallery.views import GalleryViewSet,UserViewSet,CommentsViewSet
+from gallery.views import GalleryViewSet,CommentsViewSet
 router = routers.DefaultRouter()
 
 router.register(
@@ -12,10 +12,4 @@ router.register(
     r'comments',
     CommentsViewSet,
     basename='comments'
-)
-
-router.register(
-    r'users',
-    UserViewSet,
-    basename='users'
 )

@@ -11,9 +11,9 @@ const session = axios.create({
 function login(username, password) {
 
   return session.post(
-    '/api/registration/login/',
+    '/api/login/',
     {
-      'username': username,
+      'login': username,
       'password': password,
     },
     {
@@ -25,12 +25,12 @@ function login(username, password) {
 }
 
 function logout() {
-  return session.post('/api/registration/logout/', {})
+  return session.post('/api/logout/', {})
 }
 
 function registration(username, email, password, password_confirm) {
   return session.post(
-    '/api/registration/register/',
+    '/api/register/',
     {
       'username': username,
       'email': email,

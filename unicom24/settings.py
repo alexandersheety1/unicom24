@@ -9,8 +9,9 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-
 import os
+
+DOCKER = False
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -28,18 +29,6 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # Application definition
 
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'rest_framework',
-    'rest_registration',
-    'django_filters',
-    'gallery'
-]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -51,22 +40,23 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'unicom24.urls'
+DEFAULT_FROM_EMAIL = "sypalex@yandex.ru"
+EMAIL_HOST_USER = "sypalex@yandex.ru"
+EMAIL_HOST_PASSWORD = "gfdgf"
+EMAIL_USE_TLS = True
 
-DIST_DIR = os.path.join(os.path.join(BASE_DIR, 'front'), 'dist')
-CSS_DIR = os.path.join(DIST_DIR, 'css')
-JS_DIR = os.path.join(DIST_DIR, 'js')
-STATICFILES_DIRS = [
-    DIST_DIR,
-    CSS_DIR,
-    JS_DIR
-]
+ROOT_URLCONF = 'unicom24.urls'
+FRONT_DIR = os.path.join(BASE_DIR, 'front')
+DIST_DIR = os.path.join(FRONT_DIR, 'dist')
+STATIC_ROOT = os.path.join(FRONT_DIR, 'static')
+MEDIA_ROOT = os.path.join(FRONT_DIR, 'media')
+MEDIA_URL = '/media/'
+STATIC_URL = '/static/'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [DIST_DIR]
-        ,
+        'DIRS': [DIST_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -83,24 +73,57 @@ WSGI_APPLICATION = 'unicom24.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if DOCKER:
+    INSTALLED_APPS = [
+        'django.contrib.admin',
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.messages',
+        'rest_framework',
+        'rest_framework.authtoken',
+        'rest_registration',
+        'django_filters',
+        'gallery'
+    ]
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'postgres',
+            'USER': 'postgres',
+            'PASSWORD': 'password123',
+            'HOST': 'unicom24_db',
+            'PORT': 5432,
+        }
     }
-}
+else:
+    CSS_DIR = os.path.join(DIST_DIR, 'css')
+    JS_DIR = os.path.join(DIST_DIR, 'js')
+    STATICFILES_DIRS = [
+        DIST_DIR,
+        CSS_DIR,
+        JS_DIR,
+    ]
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'postgres',
-#         'USER': 'postgres',
-#         'PASSWORD': 'password123',
-#         'HOST': 'unicom24_db',
-#         'PORT': 5432,
-#     }
-# }
+    INSTALLED_APPS = [
+        'django.contrib.admin',
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.messages',
+        'django.contrib.staticfiles',
+        'rest_framework',
+        'rest_framework.authtoken',
+        'rest_registration',
+        'django_filters',
+        'gallery'
+    ]
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -135,14 +158,14 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.FormParser',
         'rest_framework.parsers.MultiPartParser'
     ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.OrderingFilter'
+    )
 }
 
 LOGIN_URL = "/login"
 LOGIN_REDIRECT_URL = '/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
-MEDIA_FOLDER = os.path.join(BASE_DIR, 'media')
-STATIC_URL = '/static/'
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -162,5 +185,6 @@ REST_REGISTRATION = {
     'REGISTER_EMAIL_VERIFICATION_ENABLED': False,
     'RESET_PASSWORD_VERIFICATION_ENABLED': False,
 }
+AUTH_PASSWORD_VALIDATORS = []
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/

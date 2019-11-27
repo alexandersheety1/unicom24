@@ -9,6 +9,7 @@ import {
   REGISTRATION_SUCCESS,
   LOGOUT,
   REMOVE_TOKEN,
+  SET_DATA,
   SET_TOKEN,
 } from './types';
 
@@ -30,11 +31,14 @@ const getters = {
 };
 
 const actions = {
-    login({commit}, {username, password}) {
+    login({commit}, {data}) {
         commit(LOGIN_BEGIN);
-        return session.login(username, password)
-            .then(({data}) => commit(SET_TOKEN, data))
-            .then(() => commit(LOGIN_SUCCESS))
+        return session.login(data.username, data.password)
+            .then(({data}) => {
+                commit(SET_TOKEN, data);
+                commit(LOGIN_SUCCESS);
+                return data;
+            })
             .catch(() => commit(LOGIN_FAILURE));
     },
 
@@ -48,10 +52,18 @@ const actions = {
             .finally(() => commit(REMOVE_TOKEN));
     },
 
-    registration({commit}, {username,email, password,password_confirm}){
-        return session.registration(username,email, password,password_confirm)
-            .then(() => commit(REGISTRATION_SUCCESS))
+    registration({commit}, {data}){
+      // eslint-disable-next-line no-console
+        console.log("DATA ",data);
+        return session.registration(data.username,data.email,data.password,data.password_confirm)
+            .then(() => {
+                commit(REGISTRATION_SUCCESS);
+                return data;
+            })
             .catch(() => commit(REGISTRATION_FAILURE));
+    },
+    update_userdata({commit}, {data}){
+        commit(SET_DATA,data);
     },
     initialize({commit}) {
         const data = {
@@ -97,6 +109,12 @@ const mutations = {
         state.user_id = data.user_id;
         state.username = data.username;
         session.defaults.headers.Authorization = `Token ${data.token}`;
+    },
+    [SET_DATA](state, data) {
+        set_item(UID_STORAGE_KEY, data.user_id);
+        set_item(USERNAME_STORAGE_KEY, data.username);
+        state.user_id = data.user_id;
+        state.username = data.username;
     },
     [REMOVE_TOKEN](state) {
         del_item(TOKEN_STORAGE_KEY);
