@@ -42,8 +42,8 @@ MIDDLEWARE = [
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 587
-DEFAULT_FROM_EMAIL = "unicom24test@yandex.ru"
-EMAIL_HOST_USER = "unicom24test@yandex.ru"
+DEFAULT_FROM_EMAIL = "test-unicom24-new@yandex.ru"
+EMAIL_HOST_USER = "test-unicom24-new@yandex.ru"
 EMAIL_HOST_PASSWORD = ""
 EMAIL_USE_TLS = True
 
@@ -87,19 +87,19 @@ if DOCKER:
         'django_filters',
         'gallery'
     ]
-    CACHES = {
-        'default': {
-            'BACKEND': 'redis_cache.RedisCache',
-            'LOCATION': 'redis://unicom24:6379/0'
-        },
-    }
-    SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+    # CACHES = {
+    #     'default': {
+    #         'BACKEND': 'redis_cache.RedisCache',
+    #         'LOCATION': 'redis://unicom24_redis:6379/0'
+    #     },
+    # }
+    # SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'postgres',
-            'USER': 'postgres',
-            'PASSWORD': 'password123',
+            'NAME': 'unicom24',
+            'USER': 'unicom24',
+            'PASSWORD': 'unicom24qwerty',
             'HOST': 'unicom24_db',
             'PORT': 5432,
         }

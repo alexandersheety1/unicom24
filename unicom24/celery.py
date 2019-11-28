@@ -5,7 +5,7 @@ from django.conf import settings
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'unicom24.settings')
 if settings.DOCKER:
-    app = Celery('unicom24', broker=settings.CACHES['default']['LOCATION'])
+    app = Celery('unicom24', broker='redis://unicom24_redis:6379/0')
 else:
     app = Celery('unicom24', broker='redis://localhost')
 
