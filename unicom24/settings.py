@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 import os
 
-DOCKER = False
+DOCKER = True
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -39,10 +39,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-DEFAULT_FROM_EMAIL = "sypalex@yandex.ru"
-EMAIL_HOST_USER = "sypalex@yandex.ru"
-EMAIL_HOST_PASSWORD = "gfdgf"
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 587
+DEFAULT_FROM_EMAIL = "unicom24test@yandex.ru"
+EMAIL_HOST_USER = "unicom24test@yandex.ru"
+EMAIL_HOST_PASSWORD = ""
 EMAIL_USE_TLS = True
 
 ROOT_URLCONF = 'unicom24.urls'
@@ -52,7 +54,6 @@ STATIC_ROOT = os.path.join(FRONT_DIR, 'static')
 MEDIA_ROOT = os.path.join(FRONT_DIR, 'media')
 MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -86,6 +87,13 @@ if DOCKER:
         'django_filters',
         'gallery'
     ]
+    CACHES = {
+        'default': {
+            'BACKEND': 'redis_cache.RedisCache',
+            'LOCATION': 'redis://unicom24:6379/0'
+        },
+    }
+    SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',

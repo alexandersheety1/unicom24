@@ -41,17 +41,17 @@ export default new Router({
   saveScrollPosition: true,
   routes: [
     {
-      path: '/login',
+      path: '/login/',
       component: Login,
       beforeEnter: requireUnauthenticated,
     },
     {
-      path: '/registration',
+      path: '/registration/',
       component: Registration,
       beforeEnter: requireUnauthenticated,
     },
     {
-      path: '/logout',
+      path: '/logout/',
       beforeEnter: redirectLogout,
     },
     {
@@ -60,8 +60,9 @@ export default new Router({
       beforeEnter: requireAuthenticated,
     },
     {
-      path: '/:id?',
+      path: '/:id?/',
       component: Image,
+      name: 'comment',
       beforeEnter: requireAuthenticated,
     }
   ]

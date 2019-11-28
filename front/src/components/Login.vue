@@ -78,7 +78,7 @@
                 })
             },
             registration() {
-                this.$router.push('/registration');
+                this.$router.push('/registration/');
             }
         }
     }

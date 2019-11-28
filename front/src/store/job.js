@@ -25,7 +25,7 @@ const mutations = {
     [JOB_ERROR](state, do_logout = false) {
         state.error = true;
         if (do_logout) {
-            router.push('/logout');
+            router.push('/logout/');
         }
     },
     [JOB_SET](state, q) {

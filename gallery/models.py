@@ -18,7 +18,7 @@ class Gallery(models.Model):
         return "%s. %s" % (self.id, self.user.first_name)
 
     class Meta:
-        verbose_name = 'Изображения'
+        verbose_name_plural = 'Изображения'
 
 
 class Comments(models.Model):
@@ -41,7 +41,7 @@ class Comments(models.Model):
         return "%s. %s" % (self.id, self.user.first_name)
 
     class Meta:
-        verbose_name = 'Комментарии'
+        verbose_name_plural = 'Комментарии'
 
 
 class Jobs(models.Model):
@@ -65,4 +65,4 @@ class Jobs(models.Model):
         return "%s. %s" % (self.id, self.user.first_name)
 
     class Meta:
-        verbose_name = 'Отправка на почту'
+        verbose_name_plural = 'Отправка на почту'

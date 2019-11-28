@@ -12,7 +12,7 @@
           <b-form @submit.stop.prevent="onSubmit">
             <div class="col-12">
               <div :class="invalidate">
-                Ошибка при входе, проверьте данные
+                Ошибка при отправке
               </div>
               <div class="row">
                 Изображение:
@@ -30,11 +30,20 @@
             </div>
           </b-form>
         </b-modal>
+        <b-modal id="bv-modal-job" hide-footer>
+          <template v-slot:modal-title>
+            Запущена отправка на почту
+          </template>
+          <div class="d-block text-center">
+            <h3>Запущена отправка на почту</h3>
+          </div>
+          <b-button class="mt-3" block @click="$bvModal.hide('bv-modal-job')">Закрыть</b-button>
+        </b-modal>
         <div class="row justify-content-center py-4">
-          Галлерея
+          <h1>Галлерея</h1>
         </div>
         <div class="row justify-content-center pb-4">
-          <div class="col-6">
+          <div class="col-9">
             <div class="row">
               <b-button
                 v-b-modal.modal
@@ -43,12 +52,15 @@
               >
                 Добавить Изображение
               </b-button>
-              <b-button variant="outline-primary">
+              <b-button
+                variant="outline-primary"
+                @click="job_start"
+              >
                 Загружить 1 файлом
               </b-button>
             </div>
           </div>
-          <div class="col-6">
+          <div class="col-3">
             <div class="row justify-content-end align-items-center">
               Пользователь: {{ username }}
               <b-button
@@ -91,14 +103,20 @@
       v-if="images.length>0"
       class="row"
     >
-      <b-img
-        v-for="i in images"
-        :key="i"
-        :src="i"
-        fluid
-        alt=""
-        class="p-2"
-      />
+      <div class="col-3"
+           v-for="i in images" :key="i"
+      >
+        <div class="row p-2 justify-content-center align-items-center">
+          <router-link :to="{ name:'comment',params:{'id':i.id} }">
+            <b-img
+              :src="i.image"
+              fluid
+              alt=""
+            />
+          </router-link>
+        </div>
+      </div>
+
     </div>
     <div
       v-else
@@ -182,8 +200,19 @@
                 this.filter_type = new_type;
                 this.fetchData();
             },
+            job_start() {
+                let data = {'type': this.filter_type};
+                this.$store.dispatch({
+                    type: 'job/create',
+                    data: data,
+                }).then(result => {
+                    if (result && !result.error) {
+                        this.$bvModal.show('bv-modal-job');
+                    }
+                });
+            },
             logout() {
-                this.$router.push('/logout');
+                this.$router.push('/logout/');
             }
         }
     }

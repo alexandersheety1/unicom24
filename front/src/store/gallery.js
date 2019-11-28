@@ -33,7 +33,7 @@ const mutations = {
     [GALLERY_ERROR](state, do_logout = false) {
         state.error = true;
         if (do_logout) {
-            router.push('/logout');
+            router.push('/logout/');
         }
     },
     [GALLERYS_SET](state, qs) {

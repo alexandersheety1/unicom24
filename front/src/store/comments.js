@@ -33,7 +33,7 @@ const mutations = {
     [COMMENT_ERROR](state, do_logout = false) {
         state.error = true;
         if (do_logout) {
-            router.push('/logout');
+            router.push('/logout/');
         }
     },
     [COMMENTS_SET](state, qs) {
@@ -68,7 +68,7 @@ const mutations = {
 
 const actions = {
     list({commit}, {data}) {
-        return API.comment.list(data)
+        return API.comments.list(data)
             .then(function (data) {
                 commit(COMMENTS_SET, data);
                 return data
@@ -78,7 +78,7 @@ const actions = {
             });
     },
     get({commit}, {id}) {
-        return API.comment.get(id)
+        return API.comments.get(id)
             .then(function (data) {
                 commit(COMMENT_SET, data);
                 return data;
@@ -88,7 +88,7 @@ const actions = {
             });
     },
     update({commit}, {id, data}) {
-        return API.comment.update(id, data)
+        return API.comments.update(id, data)
             .then(function (data) {
                 commit(COMMENT_SET, data);
                 return data;
@@ -98,7 +98,7 @@ const actions = {
             });
     },
     upload({commit}, {id, data}) {
-        return API.comment.upload(id, data)
+        return API.comments.upload(id, data)
             .then(function (data) {
                 commit(COMMENT_SET, data);
                 return data;
@@ -108,7 +108,7 @@ const actions = {
             });
     },
     create({commit}, {data}) {
-        return API.comment.create(data)
+        return API.comments.create(data)
             .then(function (data) {
                 commit(COMMENT_SET, data);
                 return data;
@@ -118,7 +118,7 @@ const actions = {
             });
     },
     delete({commit}, {data}) {
-        return API.comment.delete(data)
+        return API.comments.delete(data)
             .then(function (data) {
                 commit(COMMENT_DEL, data);
                 return data;

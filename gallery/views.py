@@ -11,7 +11,7 @@ from gallery.tasks import send_email
 
 class EditPermission(BasePermission):
     def has_object_permission(self, request, view, obj):
-        if request.method == 'PUT' or request.method == 'DELETE':
+        if request.method == 'PUT' or request.method == 'DELETE' or request.method == 'PATCH':
             if request.user == obj.user:
                 return True
             else:
@@ -46,6 +46,13 @@ class GalleryViewSet(ModelViewSet):
             }
         return response
 
+    def retrieve(self, request, *args, **kwargs):
+        response = super().retrieve(request, args, kwargs)
+        if response.data:
+            response.data['user_id'] = request.user.id
+            response.data['username'] = request.user.username
+        return response
+
 
 class CommentsViewSet(ModelViewSet):
     serializer_class = CommentsSerializer
@@ -56,30 +63,14 @@ class CommentsViewSet(ModelViewSet):
         'user'
     )
 
-    def list(self, request, *args, **kwargs):
-        response = super().list(request, args, kwargs)
-        if len(response.data) == 0:
-            response.data = {
-                'results': [],
-                'user_id': request.user.id,
-                'username': request.user.username
-            }
-        else:
-            response.data = {
-                'results': response.data,
-                'user_id': request.user.id,
-                'username': request.user.username
-            }
-        return response
-
 
 class JobsViewSet(APIView):
     permission_classes = [IsAuthenticated]
     http_method_names = ['post']
 
     def post(self, request, format=None):
-        currentjob = Jobs.objects.get_or_create(user=request.user)
-        if currentjob.type != 1:
+        currentjob, created = Jobs.objects.get_or_create(user=request.user)
+        if currentjob.type != 2:
             type = request.data.get("type")
             if type:
                 if type == 2:

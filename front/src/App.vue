@@ -10,25 +10,11 @@
 </template>
 
 <script>
-// import store from './store';
-import { mapGetters } from 'vuex'
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
-
 Vue.use(BootstrapVue);
 export default {
   name: 'App',
-  components: {
-  },
-  computed: mapGetters('auth', [
-    'isAuthenticated'
-  ]),
-  data () {
-    return {
-      summary: null
-    }
-  },
-  methods: {}
 }
 </script>
 <style lang="scss">
