@@ -42,9 +42,9 @@ MIDDLEWARE = [
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 587
-DEFAULT_FROM_EMAIL = "test-unicom24-new@yandex.ru"
-EMAIL_HOST_USER = "test-unicom24-new@yandex.ru"
-EMAIL_HOST_PASSWORD = ""
+DEFAULT_FROM_EMAIL = "unicom24test@yandex.ru"
+EMAIL_HOST_USER = "unicom24test@yandex.ru"
+EMAIL_HOST_PASSWORD = "r9pq3dn8s93"
 EMAIL_USE_TLS = True
 
 ROOT_URLCONF = 'unicom24.urls'
