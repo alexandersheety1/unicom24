@@ -16,5 +16,7 @@
 Настроить почту для выгрузки изображений на почту в settings.py:
 
 DEFAULT_FROM_EMAIL = "test-unicom24-new@yandex.ru"
+
 EMAIL_HOST_USER = "test-unicom24-new@yandex.ru"
+
 EMAIL_HOST_PASSWORD = ""
