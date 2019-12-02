@@ -29,5 +29,7 @@ EMAIL_HOST_PASSWORD = ""
 3. Запустить
 
 
+Добавил тесты в gallery/tests
+
 
 
