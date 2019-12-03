@@ -188,7 +188,7 @@
                     type: 'gallery/get',
                     id: id,
                 }).then(result => {
-                    if (!result.error) {
+                    if (result && !result.error) {
                         this.image = result;
                         this.$store.dispatch({
                             type: 'auth/update_userdata',
@@ -212,18 +212,21 @@
                     type: 'comments/list',
                     data: data,
                 }).then(results => {
-                    if (!results.error) {
+                    if (results && !results.error) {
                         this.comments = results;
                     }
                 });
             },
             resetModal() {
                 this.comment = '';
+                this.invalidate = "invalid-feedback";
             },
             resetModal_image() {
                 this.newimage = null;
+                this.invalidate = "invalid-feedback";
             },
-            modalOk() {
+            modalOk(currentModal) {
+                currentModal.preventDefault();
                 this.$store.dispatch({
                     type: 'comments/create',
                     data: {
@@ -232,10 +235,12 @@
                         "text": this.comment,
                     },
                 }).then(result => {
-                    if (!result.error) {
-                        // eslint-disable-next-line no-console
-                        console.log("IMAGE DATA: ", result);
+                    if (result && !result.error) {
+                        this.$bvModal.hide('modal_comment');
                         this.fetchComments();
+                    } else {
+
+                        this.invalidate = "invalid-feedback shows";
                     }
                 });
             },
@@ -243,7 +248,8 @@
                 this.filter_type = new_type;
                 this.fetchData();
             },
-            edit_image() {
+            edit_image(currentModal) {
+                currentModal.preventDefault();
                 let data = create_formdata({
                     "image": this.newimage,
                     "user": this.user_id,
@@ -253,8 +259,12 @@
                     id: this.image.id,
                     data: data,
                 }).then(result => {
-                    if (!result.error) {
+                    if (result && !result.error) {
+                        this.$bvModal.hide('modal_image');
                         this.fetchData();
+                    } else {
+
+                        this.invalidate = "invalid-feedback shows";
                     }
                 });
             },
@@ -263,7 +273,7 @@
                     type: 'gallery/delete',
                     data: this.image,
                 }).then(result => {
-                    if (!result.error) {
+                    if (result && !result.error) {
                         this.$router.push('/');
                     }
                 });

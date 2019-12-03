@@ -89,7 +89,7 @@
                     type: 'auth/registration',
                     data: this.input,
                 }).then(result => {
-                        if (!result.error) {
+                        if (result && !result.error) {
                             this.$store.dispatch({
                                 type: 'auth/login',
                                 data: {
@@ -97,7 +97,7 @@
                                     'password': this.input.password,
                                 },
                             }).then(newresult => {
-                                if (!newresult.error) {
+                                if (newresult && !newresult.error) {
                                     this.$router.push('/');
                                 } else {
                                     this.invalidate = "invalid-feedback shows";

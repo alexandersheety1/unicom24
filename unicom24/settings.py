@@ -25,7 +25,7 @@ SECRET_KEY = 'bkw96vl^-f4vfsp6_rdtttz3)t$ole=813)nsl$quwp!my-omp'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost','www.unicom24.ru','unicom24.ru',"unicom24_app"]
 
 # Application definition
 
@@ -44,7 +44,7 @@ EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = "unicom24test@yandex.ru"
 EMAIL_HOST_USER = "unicom24test@yandex.ru"
-EMAIL_HOST_PASSWORD = "r9pq3dn8s93"
+EMAIL_HOST_PASSWORD = ""
 EMAIL_USE_TLS = True
 
 ROOT_URLCONF = 'unicom24.urls'
@@ -87,13 +87,13 @@ if DOCKER:
         'django_filters',
         'gallery'
     ]
-    # CACHES = {
-    #     'default': {
-    #         'BACKEND': 'redis_cache.RedisCache',
-    #         'LOCATION': 'redis://unicom24_redis:6379/0'
-    #     },
-    # }
-    # SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+    CACHES = {
+        'default': {
+            'BACKEND': 'redis_cache.RedisCache',
+            'LOCATION': 'redis://unicom24_redis:6379/0'
+        },
+    }
+    SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',

@@ -10,7 +10,6 @@ export function get_item(key) {
   try {
     parsed = JSON.parse(val);
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.log("error");
   }
   return parsed;

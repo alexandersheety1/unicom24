@@ -53,8 +53,6 @@ const actions = {
     },
 
     registration({commit}, {data}){
-      // eslint-disable-next-line no-console
-        console.log("DATA ",data);
         return session.registration(data.username,data.email,data.password,data.password_confirm)
             .then(() => {
                 commit(REGISTRATION_SUCCESS);

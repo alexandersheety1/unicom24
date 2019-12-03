@@ -55,6 +55,7 @@
               <b-button
                 variant="outline-primary"
                 @click="job_start"
+                :disabled="images.length==0"
               >
                 Загружить 1 файлом
               </b-button>
@@ -160,7 +161,7 @@
                     type: 'gallery/list',
                     data: data,
                 }).then(result => {
-                    if (!result.error) {
+                    if (result && !result.error) {
                         this.images = result.results;
                         this.$store.dispatch({
                             type: 'auth/update_userdata',
@@ -175,11 +176,10 @@
             resetModal() {
                 this.image = null;
             },
-            modalOk: function () {
+            modalOk(currentModal) {
                 let file = this.image;
-                // eslint-disable-next-line no-console
-                console.log("FILE: ", this.$refs.image, this.image);
                 if (file) {
+                    currentModal.preventDefault();
                     let data = create_formdata({
                         "image": this.image,
                         "user": this.user_id,
@@ -189,9 +189,10 @@
                         data: data,
                     }).then(result => {
                         if (result && !result.error) {
-                            // eslint-disable-next-line no-console
-                            console.log("IMAGE DATA: ", result);
+                            this.$bvModal.hide('modal');
                             this.fetchData();
+                        } else {
+                            this.invalidate = "invalid-feedback shows";
                         }
                     });
                 }

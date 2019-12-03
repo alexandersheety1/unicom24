@@ -43,6 +43,7 @@
       "plugin:vue/recommended"
     ],
     "rules": {
+      "no-console": "off",
       "vue/html-self-closing": "off"
     },
     "parserOptions": {

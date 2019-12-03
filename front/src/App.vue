@@ -4,20 +4,26 @@
       id="app"
       class="container-fluid"
     >
-      <router-view />
+      <router-view/>
     </div>
   </v-app>
 </template>
 
 <script>
-import Vue from 'vue'
-import BootstrapVue from 'bootstrap-vue'
-Vue.use(BootstrapVue);
-export default {
-  name: 'App',
-}
+    import Vue from 'vue'
+    import BootstrapVue from 'bootstrap-vue'
+
+    Vue.use(BootstrapVue);
+    export default {
+        name: 'App',
+    }
 </script>
+<style>
+  .invalid-feedback.shows {
+    display: block;
+  }
+</style>
 <style lang="scss">
-    @import '../node_modules/bootstrap/scss/bootstrap';
-    @import '../node_modules/bootstrap-vue/src/index.scss';
+  @import '../node_modules/bootstrap/scss/bootstrap';
+  @import '../node_modules/bootstrap-vue/src/index.scss';
 </style>

@@ -33,9 +33,7 @@ services:
 
   unicom24_celery:
     container_name: unicom24_celery
-    build:
-      context: .
-      dockerfile: docker-celery
+    image: unicom24_unicom24_app
     command: celery -A unicom24 worker -l info
     restart: always
     volumes:

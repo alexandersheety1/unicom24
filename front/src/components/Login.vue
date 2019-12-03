@@ -70,7 +70,7 @@
                     type: 'auth/login',
                     data: this.input,
                 }).then(result => {
-                    if (!result.error) {
+                    if (result && !result.error) {
                         this.$router.push('/');
                     } else {
                         this.invalidate = "invalid-feedback shows";
@@ -84,8 +84,3 @@
     }
 </script>
 
-<style scoped>
-  .invalid-feedback .shows {
-    display: block;
-  }
-</style>
