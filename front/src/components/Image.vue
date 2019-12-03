@@ -272,10 +272,8 @@
                 this.$store.dispatch({
                     type: 'gallery/delete',
                     data: this.image,
-                }).then(result => {
-                    if (result && !result.error) {
-                        this.$router.push('/');
-                    }
+                }).then(() => {
+                    this.$router.push('/');
                 });
             },
             goto_gallery() {
